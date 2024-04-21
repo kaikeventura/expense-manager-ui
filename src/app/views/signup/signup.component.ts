@@ -7,6 +7,9 @@ import {FlexModule} from "@angular/flex-layout";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {environment} from "../../../environments/environment";
+import {Router} from "@angular/router";
+import {CommonModule} from "@angular/common";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-signup',
@@ -23,7 +26,8 @@ import {environment} from "../../../environments/environment";
     MatCardTitle,
     FlexModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    CommonModule
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'
@@ -33,7 +37,11 @@ export class SignupComponent {
   email: string | undefined;
   password: string | undefined;
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) { }
 
   signUp() {
     const userData = {
@@ -43,15 +51,17 @@ export class SignupComponent {
     };
 
     // Replace 'your-api-endpoint' with your actual API endpoint URL
-    this.http.post(environment.apiUrl.concat("/sign-up"), userData)
+    this.http.post<any>(environment.apiUrl.concat("/sign-up"), userData)
       .subscribe(
         (response) => {
-          console.log('Account created successfully:', response);
-          // Optionally, you can redirect the user to the sign-in page
+          localStorage.setItem('accessToken', response.token);
+          this.router.navigate(['/dashboard']);
         },
         (error) => {
           console.error('Error creating account:', error);
-          // Handle error, e.g., display an error message to the user
+          this.snackBar.open('Error creating account. Please try again.', 'Close', {
+            duration: 3000,
+          });
         }
       );
   }

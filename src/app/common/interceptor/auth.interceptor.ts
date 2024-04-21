@@ -1,34 +1,35 @@
-import {HttpErrorResponse, HttpInterceptorFn} from '@angular/common/http';
-import {catchError, throwError} from "rxjs";
+import { Injectable } from '@angular/core';
+import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse} from '@angular/common/http';
+import {catchError, Observable, throwError} from 'rxjs';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const accessToken = localStorage.getItem('accessToken');
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  constructor() { }
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    const token = localStorage.getItem('accessToken');
 
-  const authReq = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  });
-
-  return next(authReq).pipe(
-    catchError((err: any) => {
-      if (err instanceof HttpErrorResponse) {
-        // Handle HTTP errors
-        if (err.status === 401) {
-          // Specific handling for unauthorized errors
-          console.error('Unauthorized request:', err);
-          // You might trigger a re-authentication flow or redirect the user here
-        } else {
-          // Handle other HTTP error codes
-          console.error('HTTP error:', err);
+    if (token) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
         }
-      } else {
-        // Handle non-HTTP errors
-        console.error('An error occurred:', err);
-      }
+      });
+    }
 
-      // Re-throw the error to propagate it further
-      return throwError(() => err);
-    })
-  );
-};
+    return next.handle(request).pipe(
+      catchError((err: any) => {
+        if (err instanceof HttpErrorResponse) {
+          if (err.status === 401) {
+            localStorage.clear()
+            window.location.href = '/signin'
+          } else {
+            console.error('HTTP error:', err);
+          }
+        } else {
+          console.error('An error occurred:', err);
+        }
+        return throwError(() => err);
+      })
+    );
+  }
+}
