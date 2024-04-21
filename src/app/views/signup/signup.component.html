@@ -1,0 +1,26 @@
+<!-- signup.component.html -->
+
+<form class="form-container" fxLayout="column" fxLayoutAlign="center center" (ngSubmit)="signUp()">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>Sign Up</mat-card-title>
+    </mat-card-header>
+    <mat-card-content fxLayout="column">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput type="text" placeholder="Enter your name" [(ngModel)]="username" name="username" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" placeholder="Enter your email" [(ngModel)]="email" name="email" required>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" placeholder="Enter your password" [(ngModel)]="password" name="password" required>
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-raised-button color="primary" type="submit">Sign Up</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

@@ -2,3 +2,37 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Add custom global styles here */
+.nav-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.nav-container a {
+  margin: 0 10px;
+}
+
+.form-container {
+  width: 100%;
+}
+
+.form-card {
+  width: 400px;
+  max-width: 90%;
+  padding: 20px;
+}
+
+@media (max-width: 600px) {
+  .form-card {
+    width: 90%;
+  }
+}
+
+.spacer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
