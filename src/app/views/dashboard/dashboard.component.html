@@ -1,1 +1,56 @@
-<p>dashboard works!</p>
+<mat-toolbar color="primary">
+  <app-signout></app-signout>
+</mat-toolbar>
+
+<div fxLayout="row">
+  <div fxFlex="60%">
+    <mat-form-field class="invoicesOptions">
+      <mat-label>Selecione uma opção</mat-label>
+      <mat-select (selectionChange)="onSelectionChange($event)">
+        <mat-option *ngFor="let option of invoicesReferences" [value]="option">
+          {{ option.referenceMonth + " " + option.state }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-card *ngIf="invoice">
+      <mat-card-header>
+        <mat-card-title>Detalhes dos gastos</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Mês de referência: {{ invoice.referenceMonth }}</p>
+        <p>Valor total: {{ invoice.totalValue }}</p>
+        <p>Status: {{ invoice.state }}</p>
+        <mat-table *ngIf="invoice.statements && invoice.statements.length > 0" [dataSource]="invoice.statements">
+          <ng-container matColumnDef="description">
+            <mat-header-cell *matHeaderCellDef> Descrição </mat-header-cell>
+            <mat-cell *matCellDef="let statement"> {{ statement.description }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="category">
+            <mat-header-cell *matHeaderCellDef> Categoria </mat-header-cell>
+            <mat-cell *matCellDef="let statement"> {{ statement.category }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="value">
+            <mat-header-cell *matHeaderCellDef> Valor </mat-header-cell>
+            <mat-cell *matCellDef="let statement"> {{ statement.value }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="type">
+            <mat-header-cell *matHeaderCellDef> Tipo </mat-header-cell>
+            <mat-cell *matCellDef="let statement"> {{ statement.type }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="createdAt">
+            <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
+            <mat-cell *matCellDef="let statement"> {{ statement.createdAt }} </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Right Part (Current Dashboard Content) -->
+  <div fxFlex="40%">
+
+  </div>
+</div>

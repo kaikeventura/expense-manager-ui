@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
-import {MatButton} from "@angular/material/button";
+import {MatAnchor, MatButton} from "@angular/material/button";
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {FlexModule} from "@angular/flex-layout";
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {environment} from "../../../environments/environment";
-import {Router} from "@angular/router";
+import {Router, RouterLink, RouterLinkActive} from "@angular/router";
 import {CommonModule} from "@angular/common";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatToolbar} from "@angular/material/toolbar";
 
 @Component({
   selector: 'app-signup',
@@ -27,7 +28,11 @@ import {MatSnackBar} from "@angular/material/snack-bar";
     FlexModule,
     HttpClientModule,
     FormsModule,
-    CommonModule
+    CommonModule,
+    MatAnchor,
+    MatToolbar,
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.css'

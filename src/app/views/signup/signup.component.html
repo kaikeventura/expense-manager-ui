@@ -1,5 +1,9 @@
-<!-- signup.component.html -->
-
+<mat-toolbar color="primary">
+  <span class="spacer">
+    <a routerLink="/signin" routerLinkActive="active" mat-button>Sign In</a>
+    <a routerLink="/signup" routerLinkActive="active" mat-button>Sign Up</a>
+  </span>
+</mat-toolbar>
 <form class="form-container" fxLayout="column" fxLayoutAlign="center center" (ngSubmit)="signUp()">
   <mat-card class="form-card">
     <mat-card-header>
