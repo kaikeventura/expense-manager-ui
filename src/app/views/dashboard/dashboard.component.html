@@ -2,4 +2,20 @@
   <app-signout></app-signout>
 </mat-toolbar>
 
-<app-invoice></app-invoice>
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">attach_money</mat-icon>
+      Gastos
+    </ng-template>
+    <app-invoice></app-invoice>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">trending_up</mat-icon>
+      Metas
+    </ng-template>
+    Content 2
+  </mat-tab>
+</mat-tab-group>
