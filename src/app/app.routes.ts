@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import {SigninComponent} from "./views/signin/signin.component";
 import {SignupComponent} from "./views/signup/signup.component";
+import {InvoiceComponent} from "./views/dashboard/invoice/invoice.component";
 import {DashboardComponent} from "./views/dashboard/dashboard.component";
 
 export const routes: Routes = [
