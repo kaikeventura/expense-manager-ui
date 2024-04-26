@@ -18,3 +18,8 @@ export interface StatementResponse {
   type: string;
   createdAt: string;
 }
+
+export interface UserDetails {
+  name: string;
+  email: string;
+}
