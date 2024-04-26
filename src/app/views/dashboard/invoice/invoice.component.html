@@ -1,6 +1,6 @@
 <div fxLayout="row">
   <div fxFlex="100%">
-    <mat-form-field class="invoicesOptions">
+    <mat-form-field class="space">
       <mat-label>Selecione uma opção</mat-label>
       <mat-select [(ngModel)]="defaultInvoicesReference" (selectionChange)="onSelectionChange($event)">
         <mat-option *ngFor="let option of invoicesReferences" [value]="option">
@@ -8,8 +8,9 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <button mat-raised-button (click)="openDialog('500ms', '300ms')">Adicionar despesa</button>
 
-    <mat-card *ngIf="invoice">
+    <mat-card *ngIf="invoice" class="background-gray space black-shadow">
       <mat-card-header>
         <mat-card-title>Detalhes dos gastos</mat-card-title>
       </mat-card-header>

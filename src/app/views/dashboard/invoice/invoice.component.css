@@ -1,0 +1,11 @@
+.background-gray {
+  background-color: rgba(245, 241, 243, 0.8);
+}
+
+.space {
+  margin: 0.5%;
+}
+
+.black-shadow {
+  box-shadow: 2px 2px 5px black;
+}

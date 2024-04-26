@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CommonModule} from "@angular/common";
-import {MatAnchor} from "@angular/material/button";
+import {MatAnchor, MatButton, MatButtonModule} from "@angular/material/button";
 import {MatToolbar} from "@angular/material/toolbar";
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
@@ -28,11 +28,20 @@ import {StatementTypesDictionaryPipe} from "../../../common/pipe/statement-types
 import {StatementCategoriesDictionaryPipe} from "../../../common/pipe/statement-categories-dictionary.pipe";
 import {LocalDateTimePipe} from "../../../common/pipe/local-date-time.pipe";
 import {FormsModule} from "@angular/forms";
+import {
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle
+} from "@angular/material/dialog";
+import {ExpenseDialogComponent} from "./expense-dialog/expense-dialog.component";
 
 @Component({
   selector: 'app-invoice',
   standalone: true,
-  imports: [CommonModule, MatAnchor, MatToolbar, RouterLink, RouterLinkActive, MatFormField, MatSelect, MatOption, MatLabel, MatTable, MatHeaderCellDef, MatHeaderCell, MatCell, MatCellDef, MatColumnDef, MatCardContent, MatCardTitle, MatCardHeader, MatCard, MatHeaderRowDef, MatRow, MatRowDef, MatHeaderRow, FlexModule, SignoutComponent, YearMonthPipe, InvoiceStateDictionaryPipe, BrlConverterPipe, StatementTypesDictionaryPipe, StatementCategoriesDictionaryPipe, LocalDateTimePipe, FormsModule],
+  imports: [CommonModule, MatAnchor, MatToolbar, RouterLink, RouterLinkActive, MatFormField, MatSelect, MatOption, MatLabel, MatTable, MatHeaderCellDef, MatHeaderCell, MatCell, MatCellDef, MatColumnDef, MatCardContent, MatCardTitle, MatCardHeader, MatCard, MatHeaderRowDef, MatRow, MatRowDef, MatHeaderRow, FlexModule, SignoutComponent, YearMonthPipe, InvoiceStateDictionaryPipe, BrlConverterPipe, StatementTypesDictionaryPipe, StatementCategoriesDictionaryPipe, LocalDateTimePipe, FormsModule, MatButton],
   templateUrl: './invoice.component.html',
   styleUrl: './invoice.component.css'
 })
@@ -45,7 +54,8 @@ export class InvoiceComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
   ) {
   }
 
@@ -72,6 +82,14 @@ export class InvoiceComponent implements OnInit {
 
   onSelectionChange(event: any) {
     this.findInvoice(event.value.referenceMonth)
+  }
+
+  openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+    this.dialog.open(ExpenseDialogComponent, {
+      width: '600px',
+      enterAnimationDuration,
+      exitAnimationDuration,
+    });
   }
 
   private findInvoice(referenceMonth: string) {
