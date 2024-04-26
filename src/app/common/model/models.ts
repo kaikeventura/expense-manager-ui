@@ -23,3 +23,8 @@ export interface UserDetails {
   name: string;
   email: string;
 }
+
+export interface Enum {
+  name: string;
+  description: string;
+}
