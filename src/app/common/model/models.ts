@@ -28,3 +28,12 @@ export interface Enum {
   name: string;
   description: string;
 }
+
+export interface StatementRequest {
+  description: string;
+  category: string;
+  value: number;
+  installmentAmount?: number;
+  type: string;
+  referenceMonth: string;
+}

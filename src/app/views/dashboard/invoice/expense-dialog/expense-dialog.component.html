@@ -1,20 +1,39 @@
 <h2 mat-dialog-title>Nova despesa</h2>
-<mat-form-field class="space">
-  <mat-label>Selecione o tipo</mat-label>
-  <mat-select [(ngModel)]="defaultType">
-    <mat-option *ngFor="let option of statementTypes" [value]="option">
-      {{ option.description }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-<mat-form-field class="space">
-  <mat-label>Selecione a categoria</mat-label>
-  <mat-select [(ngModel)]="defaultCategory">
-    <mat-option *ngFor="let option of statementCategories" [value]="option">
-      {{ option.description }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<form #form="ngForm" (ngSubmit)="onSubmitNewStatement()">
+  <mat-form-field floatLabel="always" class="space">
+    <mat-label>Descrição</mat-label>
+    <input matInput type="text" class="example-right-align" placeholder="Comprinha" [(ngModel)]="formData.description">
+  </mat-form-field>
+  <mat-form-field floatLabel="always" class="space">
+    <mat-label>Valor</mat-label>
+    <input matInput type="number" class="example-right-align" placeholder="0" [(ngModel)]="formData.value">
+    <span matTextPrefix>R$&nbsp;</span>
+  </mat-form-field>
+  <mat-form-field class="space">
+    <mat-label>Selecione o tipo</mat-label>
+    <mat-select [(ngModel)]="defaultType">
+      <mat-option *ngFor="let option of statementTypes" [value]="option">
+        {{ option.description }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="space">
+    <mat-label>Número de parcelas</mat-label>
+    <mat-select [(ngModel)]="defaultInstallmentAmount">
+      <mat-option *ngFor="let option of installmentsAmount" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="space">
+    <mat-label>Selecione a categoria</mat-label>
+    <mat-select [(ngModel)]="defaultCategory">
+      <mat-option *ngFor="let option of statementCategories" [value]="option">
+        {{ option.description }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close cdkFocusInitial>Fechar</button>
 </mat-dialog-actions>
