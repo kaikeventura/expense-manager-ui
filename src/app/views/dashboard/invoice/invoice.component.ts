@@ -28,15 +28,9 @@ import {StatementTypesDictionaryPipe} from "../../../common/pipe/statement-types
 import {StatementCategoriesDictionaryPipe} from "../../../common/pipe/statement-categories-dictionary.pipe";
 import {LocalDateTimePipe} from "../../../common/pipe/local-date-time.pipe";
 import {FormsModule} from "@angular/forms";
-import {
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle
-} from "@angular/material/dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {ExpenseDialogComponent} from "./expense-dialog/expense-dialog.component";
+import {InvoiceService} from "../../../common/service/invoice.service";
 
 @Component({
   selector: 'app-invoice',
@@ -53,28 +47,26 @@ export class InvoiceComponent implements OnInit {
   displayedColumns: string[] = ['description', 'category', 'value', 'type', 'createdAt'];
 
   constructor(
-    private http: HttpClient,
+    private invoiceService: InvoiceService,
     private snackBar: MatSnackBar,
     public dialog: MatDialog
   ) {
   }
 
   ngOnInit(): void {
-    this.http.get<InvoiceReference[]>(environment.apiUrl.concat("/invoices/references"))
-      .subscribe(
-        (response) => {
-          this.invoicesReferences = response
-          this.defaultInvoicesReference = response.find(reference => reference.state === "CURRENT")
-          localStorage.setItem('currentReferenceMonth', this.defaultInvoicesReference?.referenceMonth as string);
-          this.onLoad(this.defaultInvoicesReference?.referenceMonth || "")
-        },
-        (error) => {
-          console.error('Error creating account:', error);
-          this.snackBar.open('Error when trying load invoices references', 'Close', {
-            duration: 3000,
-          });
-        }
-      );
+    this.invoiceService.getInvoicesReferences().subscribe(
+      response => {
+        this.invoicesReferences = response
+        this.defaultInvoicesReference = response.find(reference => reference.state === "CURRENT")
+        localStorage.setItem('currentReferenceMonth', this.defaultInvoicesReference?.referenceMonth as string);
+        this.onLoad(this.defaultInvoicesReference?.referenceMonth || "")
+      },
+      error => {
+        this.snackBar.open('Erro ao carregar as referências das faturas', 'Close', {
+          duration: 3000,
+        });
+      }
+    )
   }
 
   onLoad(referenceMonth: string) {
@@ -94,17 +86,15 @@ export class InvoiceComponent implements OnInit {
   }
 
   private findInvoice(referenceMonth: string) {
-    this.http.get<InvoiceResponse>(environment.apiUrl.concat(`/invoices/${referenceMonth}`))
-      .subscribe(
-        (response) => {
-          this.invoice = response
-        },
-        (error) => {
-          console.error('Error creating account:', error);
-          this.snackBar.open('Error when trying load invoices references', 'Close', {
-            duration: 3000,
-          });
-        }
-      );
+    this.invoiceService.getInvoiceDetails(referenceMonth).subscribe(
+      response => {
+        this.invoice = response
+      },
+      error => {
+        this.snackBar.open(`Erro ao carregar os detalhes da fatura ${referenceMonth}`, 'Close', {
+          duration: 3000,
+        });
+      }
+    );
   }
 }
