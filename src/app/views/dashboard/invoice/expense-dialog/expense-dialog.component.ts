@@ -6,7 +6,7 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatFabButton} from "@angular/material/button";
 import {Enum, StatementRequest} from "../../../../common/model/models";
 import {environment} from "../../../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
@@ -19,6 +19,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {YearMonthPipe} from "../../../../common/pipe/year-month.pipe";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatInput} from "@angular/material/input";
+import {MatIcon} from "@angular/material/icon";
 
 class EnumForm {
   name: string | undefined
@@ -47,7 +48,9 @@ class EnumForm {
     MatSuffix,
     ReactiveFormsModule,
     MatSelectModule,
-    NgIf
+    NgIf,
+    MatFabButton,
+    MatIcon
   ],
   templateUrl: './expense-dialog.component.html',
   styleUrl: './expense-dialog.component.css'

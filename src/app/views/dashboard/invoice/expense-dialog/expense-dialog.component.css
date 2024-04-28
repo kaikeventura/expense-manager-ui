@@ -1,3 +1,11 @@
 .space {
   margin: 0.5%;
 }
+
+.example-form {
+  width: 99%;
+}
+
+.example-full-width {
+  width: 100%;
+}
