@@ -14,11 +14,16 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {InvoiceStateDictionaryPipe} from "../../../../common/pipe/invoice-state-dictionary.pipe";
 import {MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatOption} from "@angular/material/autocomplete";
-import {MatSelect} from "@angular/material/select";
-import {NgForOf} from "@angular/common";
+import {MatSelect, MatSelectModule} from "@angular/material/select";
+import {NgForOf, NgIf} from "@angular/common";
 import {YearMonthPipe} from "../../../../common/pipe/year-month.pipe";
-import {FormGroup, FormsModule} from "@angular/forms";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatInput} from "@angular/material/input";
+
+class EnumForm {
+  name: string | undefined
+  description: string | undefined
+}
 
 @Component({
   selector: 'app-expense-dialog',
@@ -39,41 +44,65 @@ import {MatInput} from "@angular/material/input";
     FormsModule,
     MatInput,
     MatPrefix,
-    MatSuffix
+    MatSuffix,
+    ReactiveFormsModule,
+    MatSelectModule,
+    NgIf
   ],
   templateUrl: './expense-dialog.component.html',
   styleUrl: './expense-dialog.component.css'
 })
 export class ExpenseDialogComponent {
   statementTypes: Enum[] | undefined
-  defaultType: Enum | undefined
   statementCategories: Enum[] | undefined
-  defaultCategory: Enum | undefined
 
-  installmentsAmount = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-  defaultInstallmentAmount = 1
+  installmentsOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
-  form!: FormGroup
-  formData: any = {};
+  expenseForm = new FormGroup({
+    description: new FormControl<string>('', Validators.required),
+    value: new FormControl<number>(0, Validators.required),
+    type: new FormControl(EnumForm, Validators.required),
+    installmentAmount: new FormControl<number>(0),
+    category: new FormControl(EnumForm, Validators.required)
+  })
 
   constructor(
     public dialogRef: MatDialogRef<ExpenseDialogComponent>,
     private http: HttpClient,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar
   ) {
     this.getTypes()
     this.getCategories()
   }
 
   onSubmitNewStatement() {
+    const formValidator = this.expenseForm.value
     const statement: StatementRequest = {
-      description: this.formData.description,
-      category: "",
-      value: 1,
-      installmentAmount: 1,
-      type: "",
-      referenceMonth: ""
+      description: formValidator.description as string,
+      category: formValidator.category?.name as string,
+      value: formValidator.value as number,
+      type: formValidator.type?.name as string,
+      referenceMonth: localStorage.getItem("currentReferenceMonth") as string
     }
+
+    if (formValidator.installmentAmount != 0) {
+      statement.installmentAmount = formValidator.installmentAmount as number
+    }
+
+    this.http.post(environment.apiUrl.concat(`/statements`), statement)
+      .subscribe(
+        (response) => {
+          window.location.reload()
+          this.snackBar.open('Despesa criada com sucesso', 'Close', {
+            duration: 3000
+          });
+        },
+        (error) => {
+          this.snackBar.open('Erro ao criar um nova despesa', 'Close', {
+            duration: 3000,
+          });
+        }
+      );
   }
 
   private getTypes() {
@@ -81,7 +110,6 @@ export class ExpenseDialogComponent {
       .subscribe(
         (response) => {
           this.statementTypes = response
-          this.defaultType = response[0]
         },
         (error) => {
           this.snackBar.open('Error when trying load statement types', 'Close', {
@@ -96,7 +124,6 @@ export class ExpenseDialogComponent {
       .subscribe(
         (response) => {
           this.statementCategories = response
-          this.defaultCategory = response[0]
         },
         (error) => {
           this.snackBar.open('Error when trying load statement categories', 'Close', {

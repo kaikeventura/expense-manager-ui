@@ -65,6 +65,7 @@ export class InvoiceComponent implements OnInit {
         (response) => {
           this.invoicesReferences = response
           this.defaultInvoicesReference = response.find(reference => reference.state === "CURRENT")
+          localStorage.setItem('currentReferenceMonth', this.defaultInvoicesReference?.referenceMonth as string);
           this.onLoad(this.defaultInvoicesReference?.referenceMonth || "")
         },
         (error) => {

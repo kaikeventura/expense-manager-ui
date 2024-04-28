@@ -1,38 +1,39 @@
 <h2 mat-dialog-title>Nova despesa</h2>
-<form #form="ngForm" (ngSubmit)="onSubmitNewStatement()">
+<form [formGroup]="expenseForm" (ngSubmit)="onSubmitNewStatement()">
   <mat-form-field floatLabel="always" class="space">
     <mat-label>Descrição</mat-label>
-    <input matInput type="text" class="example-right-align" placeholder="Comprinha" [(ngModel)]="formData.description">
+    <input matInput type="text" class="example-right-align" placeholder="Comprinha" formControlName="description">
   </mat-form-field>
   <mat-form-field floatLabel="always" class="space">
     <mat-label>Valor</mat-label>
-    <input matInput type="number" class="example-right-align" placeholder="0" [(ngModel)]="formData.value">
+    <input matInput type="number" class="example-right-align" placeholder="0" formControlName="value">
     <span matTextPrefix>R$&nbsp;</span>
   </mat-form-field>
   <mat-form-field class="space">
     <mat-label>Selecione o tipo</mat-label>
-    <mat-select [(ngModel)]="defaultType">
+    <mat-select formControlName="type">
       <mat-option *ngFor="let option of statementTypes" [value]="option">
         {{ option.description }}
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <mat-form-field class="space">
+  <mat-form-field class="space" *ngIf="expenseForm.value.type?.name == 'CREDIT_CARD'">
     <mat-label>Número de parcelas</mat-label>
-    <mat-select [(ngModel)]="defaultInstallmentAmount">
-      <mat-option *ngFor="let option of installmentsAmount" [value]="option">
+    <mat-select formControlName="installmentAmount">
+      <mat-option *ngFor="let option of installmentsOptions" [value]="option">
         {{ option }}
       </mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field class="space">
     <mat-label>Selecione a categoria</mat-label>
-    <mat-select [(ngModel)]="defaultCategory">
+    <mat-select formControlName="category">
       <mat-option *ngFor="let option of statementCategories" [value]="option">
         {{ option.description }}
       </mat-option>
     </mat-select>
   </mat-form-field>
+  <button type="submit" mat-button [disabled]="!expenseForm.valid">Create</button>
 </form>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close cdkFocusInitial>Fechar</button>
