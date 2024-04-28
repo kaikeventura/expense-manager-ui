@@ -6,7 +6,7 @@
   </mat-form-field>
   <mat-form-field floatLabel="always" class="example-full-width space">
     <mat-label>Valor</mat-label>
-    <input matInput type="number" class="example-right-align" formControlName="value">
+    <input matInput type="text" mask="separator.2" thousandSeparator="." decimalMarker="," [leadZero]="true" class="example-right-align" formControlName="value">
     <span matTextPrefix>R$&nbsp;</span>
   </mat-form-field>
   <mat-form-field class="example-full-width space">

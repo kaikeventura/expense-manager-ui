@@ -20,6 +20,7 @@ import {YearMonthPipe} from "../../../../common/pipe/year-month.pipe";
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {MatInput} from "@angular/material/input";
 import {MatIcon} from "@angular/material/icon";
+import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
 
 class EnumForm {
   name: string | undefined
@@ -50,8 +51,10 @@ class EnumForm {
     MatSelectModule,
     NgIf,
     MatFabButton,
-    MatIcon
+    MatIcon,
+    NgxMaskDirective
   ],
+  providers: provideNgxMask(),
   templateUrl: './expense-dialog.component.html',
   styleUrl: './expense-dialog.component.css'
 })
@@ -80,10 +83,11 @@ export class ExpenseDialogComponent {
 
   onSubmitNewStatement() {
     const formValidator = this.expenseForm.value
+
     const statement: StatementRequest = {
       description: formValidator.description as string,
       category: formValidator.category?.name as string,
-      value: formValidator.value as number,
+      value: this.statementValueNormalize(formValidator.value as number),
       type: formValidator.type?.name as string,
       referenceMonth: localStorage.getItem("currentReferenceMonth") as string
     }
@@ -134,5 +138,9 @@ export class ExpenseDialogComponent {
           });
         }
       );
+  }
+
+  private statementValueNormalize(value: number) {
+    return value * 100;
   }
 }
