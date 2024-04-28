@@ -1,6 +1,6 @@
 <div fxLayout="row">
   <div fxFlex="100%">
-    <mat-form-field class="space">
+    <mat-form-field class="space test">
       <mat-label>Selecione uma opção</mat-label>
       <mat-select [(ngModel)]="defaultInvoicesReference" (selectionChange)="onSelectionChange($event)">
         <mat-option *ngFor="let option of invoicesReferences" [value]="option">
@@ -18,7 +18,13 @@
         <p>Mês de referência: {{ invoice.referenceMonth | yearMonth }}</p>
         <p>Valor total: {{ invoice.totalValue | brlConverter }}</p>
         <p>Status: {{ invoice.state | invoiceStateDictionary }}</p>
-        <mat-table *ngIf="invoice.statements && invoice.statements.length > 0" [dataSource]="invoice.statements">
+
+        <mat-form-field>
+          <mat-label>Buscar por descrição</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Comprinha na amazon" #input>
+        </mat-form-field>
+
+        <mat-table *ngIf="invoice.statements && invoice.statements.length > 0" [dataSource]="dataSource!!">
           <ng-container matColumnDef="description">
             <mat-header-cell *matHeaderCellDef> Descrição </mat-header-cell>
             <mat-cell *matCellDef="let statement"> {{ statement.description }} </mat-cell>

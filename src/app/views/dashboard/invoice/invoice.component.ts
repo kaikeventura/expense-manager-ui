@@ -8,7 +8,7 @@ import {environment} from "../../../../environments/environment";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
-import {InvoiceReference, InvoiceResponse} from "../../../common/model/models";
+import {InvoiceReference, InvoiceResponse, StatementResponse} from "../../../common/model/models";
 import {
   MatCell,
   MatCellDef,
@@ -16,7 +16,7 @@ import {
   MatHeaderCell,
   MatHeaderCellDef, MatHeaderRow,
   MatHeaderRowDef, MatRow, MatRowDef,
-  MatTable
+  MatTable, MatTableDataSource
 } from "@angular/material/table";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
 import {FlexModule} from "@angular/flex-layout";
@@ -31,11 +31,12 @@ import {FormsModule} from "@angular/forms";
 import {MatDialog} from "@angular/material/dialog";
 import {ExpenseDialogComponent} from "./expense-dialog/expense-dialog.component";
 import {InvoiceService} from "../../../common/service/invoice.service";
+import {MatInput} from "@angular/material/input";
 
 @Component({
   selector: 'app-invoice',
   standalone: true,
-  imports: [CommonModule, MatAnchor, MatToolbar, RouterLink, RouterLinkActive, MatFormField, MatSelect, MatOption, MatLabel, MatTable, MatHeaderCellDef, MatHeaderCell, MatCell, MatCellDef, MatColumnDef, MatCardContent, MatCardTitle, MatCardHeader, MatCard, MatHeaderRowDef, MatRow, MatRowDef, MatHeaderRow, FlexModule, SignoutComponent, YearMonthPipe, InvoiceStateDictionaryPipe, BrlConverterPipe, StatementTypesDictionaryPipe, StatementCategoriesDictionaryPipe, LocalDateTimePipe, FormsModule, MatButton],
+  imports: [CommonModule, MatAnchor, MatToolbar, RouterLink, RouterLinkActive, MatFormField, MatSelect, MatOption, MatLabel, MatTable, MatHeaderCellDef, MatHeaderCell, MatCell, MatCellDef, MatColumnDef, MatCardContent, MatCardTitle, MatCardHeader, MatCard, MatHeaderRowDef, MatRow, MatRowDef, MatHeaderRow, FlexModule, SignoutComponent, YearMonthPipe, InvoiceStateDictionaryPipe, BrlConverterPipe, StatementTypesDictionaryPipe, StatementCategoriesDictionaryPipe, LocalDateTimePipe, FormsModule, MatButton, MatInput],
   templateUrl: './invoice.component.html',
   styleUrl: './invoice.component.css'
 })
@@ -44,6 +45,7 @@ export class InvoiceComponent implements OnInit {
   invoicesReferences: InvoiceReference[] | undefined;
   defaultInvoicesReference: InvoiceReference | undefined;
   invoice: InvoiceResponse | undefined;
+  dataSource: MatTableDataSource<StatementResponse> | undefined;
   displayedColumns: string[] = ['description', 'category', 'value', 'type', 'createdAt'];
 
   constructor(
@@ -85,10 +87,16 @@ export class InvoiceComponent implements OnInit {
     });
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource!!.filter = filterValue.trim().toLowerCase();
+  }
+
   private findInvoice(referenceMonth: string) {
     this.invoiceService.getInvoiceDetails(referenceMonth).subscribe(
       response => {
         this.invoice = response
+        this.dataSource = new MatTableDataSource(response.statements)
       },
       error => {
         this.snackBar.open(`Erro ao carregar os detalhes da fatura ${referenceMonth}`, 'Close', {

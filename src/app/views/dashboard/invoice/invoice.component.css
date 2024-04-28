@@ -9,3 +9,16 @@
 .black-shadow {
   box-shadow: 2px 2px 5px black;
 }
+
+table {
+  width: 100%;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.test {
+  width: 36.1%;
+}
