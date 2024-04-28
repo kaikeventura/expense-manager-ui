@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  expense-manager-ui:
+    container_name: expense-manager-ui
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
