@@ -75,7 +75,7 @@ export class ExpenseDialogComponent {
   proportionalityOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90]
 
   expenseForm = new FormGroup({
-    description: new FormControl<string>('', Validators.required),
+    description: new FormControl<string>('', [Validators.required, Validators.minLength(1), Validators.nullValidator]),
     value: new FormControl<number>(0, Validators.required),
     type: new FormControl(EnumForm, Validators.required),
     installmentAmount: new FormControl<number>(0),
