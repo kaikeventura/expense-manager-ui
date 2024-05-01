@@ -12,6 +12,9 @@ export class StatementCategoriesDictionaryPipe implements PipeTransform {
       ["FOOD", "Alimentação"],
       ["TRANSPORTATION", "Transporte"],
       ["ENTERTAINMENT", "Entretenimento"],
+      ["STREAMING", "Streaming"],
+      ["ELECTRONICS", "Eletrônicos"],
+      ["GAMES", "Jogos"],
       ["HEALTH", "Saúde"],
       ["UTILITIES", "Serviços públicos"],
       ["EDUCATION", "Educação"],
@@ -20,6 +23,7 @@ export class StatementCategoriesDictionaryPipe implements PipeTransform {
       ["TRAVEL", "Viagem"],
       ["PERSONAL_CARE", "Cuidados pessoais"],
       ["GIFTS", "Presentes"],
+      ["BULLSHIT", "Besteirinhas"],
       ["OTHER", "Outros"]
     ]);
 
