@@ -42,7 +42,7 @@ export class DashboardComponent {
   }
 
   getUserDetails(): void {
-    this.http.get<UserDetails>(environment.apiUrl.concat("/user/details"))
+    this.http.get<UserDetails>(environment.apiUrl.concat("/users/details"))
       .subscribe(
         (response) => {
           this.userDetails = response
