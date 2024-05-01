@@ -1,66 +1,68 @@
 <h2 mat-dialog-title>Nova despesa</h2>
-<form class="example-form" [formGroup]="expenseForm" (ngSubmit)="onSubmitNewStatement()">
-  <mat-form-field floatLabel="always" class="example-full-width space">
-    <mat-label>Descrição</mat-label>
-    <input matInput type="text" class="example-right-align" placeholder="Comprinha" formControlName="description">
-  </mat-form-field>
-  <mat-form-field floatLabel="always" class="example-full-width space">
-    <mat-label>Valor</mat-label>
-    <input matInput type="text" mask="separator.2" thousandSeparator="." decimalMarker="," [leadZero]="true" class="example-right-align" formControlName="value">
-    <span matTextPrefix>R$&nbsp;</span>
-  </mat-form-field>
-  <mat-form-field class="example-full-width space">
-    <mat-label>Selecione o tipo</mat-label>
-    <mat-select formControlName="type">
-      <mat-option *ngFor="let option of statementTypes" [value]="option">
-        {{ option.description }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field class="example-full-width space" *ngIf="expenseForm.value.type?.name == 'CREDIT_CARD'">
-    <mat-label>Número de parcelas</mat-label>
-    <mat-select formControlName="installmentAmount">
-      <mat-option *ngFor="let option of installmentsOptions" [value]="option">
-        {{ option }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field class="example-full-width space">
-    <mat-label>Selecione a categoria</mat-label>
-    <mat-select formControlName="category">
-      <mat-option *ngFor="let option of statementCategories" [value]="option">
-        {{ option.description }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <p class="spacer">
-    <mat-slide-toggle
-      labelPosition="before"
-      (change)="changeProportionalityExpense()"
-      color="primary">Despesa compartilhada
-    </mat-slide-toggle>
-  </p>
-  <mat-form-field *ngIf="isProportionalityExpense" class="example-full-width space">
-    <mat-label>Dividir com</mat-label>
-    <mat-select formControlName="shareWith">
-      <mat-option *ngFor="let option of othersUsers" [value]="option">
-        {{ option.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field *ngIf="isProportionalityExpense" class="example-full-width space">
-    <mat-label>Minha proporcionalidade</mat-label>
-    <mat-select formControlName="proportionality">
-      <mat-option *ngFor="let option of proportionalityOptions" [value]="option">
-        {{ option }}%
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-  <button type="submit" mat-fab extended color="primary" [disabled]="!expenseForm.valid" style="float: right;">
-    <mat-icon>save</mat-icon>
-    Criar
-  </button>
-</form>
+<mat-dialog-content class="mat-typography">
+  <form class="example-form" [formGroup]="expenseForm" (ngSubmit)="onSubmitNewStatement()">
+    <mat-form-field floatLabel="always" class="example-full-width space">
+      <mat-label>Descrição</mat-label>
+      <input matInput type="text" class="example-right-align" placeholder="Comprinha" formControlName="description">
+    </mat-form-field>
+    <mat-form-field floatLabel="always" class="example-full-width space">
+      <mat-label>Valor</mat-label>
+      <input matInput type="text" mask="separator.2" thousandSeparator="." decimalMarker="," [leadZero]="true" class="example-right-align" formControlName="value">
+      <span matTextPrefix>R$&nbsp;</span>
+    </mat-form-field>
+    <mat-form-field class="example-full-width space">
+      <mat-label>Selecione o tipo</mat-label>
+      <mat-select formControlName="type">
+        <mat-option *ngFor="let option of statementTypes" [value]="option">
+          {{ option.description }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="example-full-width space" *ngIf="expenseForm.value.type?.name == 'CREDIT_CARD'">
+      <mat-label>Número de parcelas</mat-label>
+      <mat-select formControlName="installmentAmount">
+        <mat-option *ngFor="let option of installmentsOptions" [value]="option">
+          {{ option }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="example-full-width space">
+      <mat-label>Selecione a categoria</mat-label>
+      <mat-select formControlName="category">
+        <mat-option *ngFor="let option of statementCategories" [value]="option">
+          {{ option.description }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <p class="spacer">
+      <mat-slide-toggle
+        labelPosition="before"
+        (change)="changeProportionalityExpense()"
+        color="primary">Despesa compartilhada
+      </mat-slide-toggle>
+    </p>
+    <mat-form-field *ngIf="isProportionalityExpense" class="example-full-width space">
+      <mat-label>Dividir com</mat-label>
+      <mat-select formControlName="shareWith">
+        <mat-option *ngFor="let option of othersUsers" [value]="option">
+          {{ option.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field *ngIf="isProportionalityExpense" class="example-full-width space">
+      <mat-label>Minha proporcionalidade</mat-label>
+      <mat-select formControlName="proportionality">
+        <mat-option *ngFor="let option of proportionalityOptions" [value]="option">
+          {{ option }}%
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button type="submit" mat-fab extended color="primary" [disabled]="!expenseForm.valid" style="float: right;">
+      <mat-icon>save</mat-icon>
+      Criar
+    </button>
+  </form>
+</mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button mat-dialog-close cdkFocusInitial>Fechar</button>
 </mat-dialog-actions>
