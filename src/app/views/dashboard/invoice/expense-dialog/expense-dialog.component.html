@@ -33,6 +33,29 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+  <p class="spacer">
+    <mat-slide-toggle
+      labelPosition="before"
+      (change)="changeProportionalityExpense()"
+      color="primary">Despesa compartilhada
+    </mat-slide-toggle>
+  </p>
+  <mat-form-field *ngIf="isProportionalityExpense" class="example-full-width space">
+    <mat-label>Dividir com</mat-label>
+    <mat-select formControlName="shareWith">
+      <mat-option *ngFor="let option of othersUsers" [value]="option">
+        {{ option.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field *ngIf="isProportionalityExpense" class="example-full-width space">
+    <mat-label>Minha proporcionalidade</mat-label>
+    <mat-select formControlName="proportionality">
+      <mat-option *ngFor="let option of proportionalityOptions" [value]="option">
+        {{ option }}%
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
   <button type="submit" mat-fab extended color="primary" [disabled]="!expenseForm.valid" style="float: right;">
     <mat-icon>save</mat-icon>
     Criar

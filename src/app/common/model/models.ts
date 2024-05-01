@@ -36,4 +36,10 @@ export interface StatementRequest {
   installmentAmount?: number;
   type: string;
   referenceMonth: string;
+  proportionality?: ProportionalityRequest;
+}
+
+export interface ProportionalityRequest {
+  userEmail: string;
+  percentage: number;
 }

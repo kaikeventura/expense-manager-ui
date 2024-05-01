@@ -7,7 +7,7 @@ import {
   MatDialogTitle
 } from "@angular/material/dialog";
 import {MatButton, MatFabButton} from "@angular/material/button";
-import {Enum, StatementRequest} from "../../../../common/model/models";
+import {Enum, StatementRequest, UserDetails} from "../../../../common/model/models";
 import {environment} from "../../../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -21,10 +21,16 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {MatInput} from "@angular/material/input";
 import {MatIcon} from "@angular/material/icon";
 import {NgxMaskDirective, provideNgxMask} from "ngx-mask";
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 class EnumForm {
   name: string | undefined
   description: string | undefined
+}
+
+class ProportionalityForm {
+  name: string = ""
+  email: string = ""
 }
 
 @Component({
@@ -52,7 +58,8 @@ class EnumForm {
     NgIf,
     MatFabButton,
     MatIcon,
-    NgxMaskDirective
+    NgxMaskDirective,
+    MatSlideToggleModule
   ],
   providers: provideNgxMask(),
   templateUrl: './expense-dialog.component.html',
@@ -61,15 +68,20 @@ class EnumForm {
 export class ExpenseDialogComponent {
   statementTypes: Enum[] | undefined
   statementCategories: Enum[] | undefined
+  othersUsers: UserDetails[] | undefined
+  isProportionalityExpense: boolean = false
 
   installmentsOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  proportionalityOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90]
 
   expenseForm = new FormGroup({
     description: new FormControl<string>('', Validators.required),
     value: new FormControl<number>(0, Validators.required),
     type: new FormControl(EnumForm, Validators.required),
     installmentAmount: new FormControl<number>(0),
-    category: new FormControl(EnumForm, Validators.required)
+    category: new FormControl(EnumForm, Validators.required),
+    proportionality: new FormControl<number>(0),
+    shareWith: new FormControl(ProportionalityForm)
   })
 
   constructor(
@@ -79,6 +91,7 @@ export class ExpenseDialogComponent {
   ) {
     this.getTypes()
     this.getCategories()
+    this.getOthersUsers()
   }
 
   onSubmitNewStatement() {
@@ -96,6 +109,23 @@ export class ExpenseDialogComponent {
       statement.installmentAmount = formValidator.installmentAmount as number
     }
 
+    if (this.isProportionalityExpense) {
+      const otherUser = this.expenseForm.get('shareWith')?.getRawValue() as ProportionalityForm
+      statement.proportionality = {
+        userEmail: otherUser.email,
+        percentage: formValidator.proportionality as number
+      }
+    }
+
+    if (this.isProportionalityExpense) {
+      this.createProportionalityExpense(statement)
+    }
+    else {
+      this.createExpense(statement)
+    }
+  }
+
+  private createExpense(statement: StatementRequest) {
     this.http.post(environment.apiUrl.concat(`/statements`), statement)
       .subscribe(
         (response) => {
@@ -110,6 +140,38 @@ export class ExpenseDialogComponent {
           });
         }
       );
+  }
+
+  private createProportionalityExpense(statement: StatementRequest) {
+    this.http.post(environment.apiUrl.concat(`/statements/proportionality`), statement)
+      .subscribe(
+        (response) => {
+          window.location.reload()
+          this.snackBar.open('Despesa compartilhada criada com sucesso', 'Close', {
+            duration: 3000
+          });
+        },
+        (error) => {
+          this.snackBar.open('Erro ao criar um nova despesa compartilhada', 'Close', {
+            duration: 3000,
+          });
+        }
+      );
+  }
+
+  changeProportionalityExpense() {
+    this.isProportionalityExpense = !this.isProportionalityExpense
+    this.handleProportionalityValidators();
+  }
+
+  private handleProportionalityValidators() {
+    if (this.isProportionalityExpense) {
+      this.expenseForm.get('proportionality')?.setValidators(Validators.required)
+      this.expenseForm.get('shareWith')?.setValidators(Validators.required)
+    } else {
+      this.expenseForm.get('proportionality')?.clearValidators()
+      this.expenseForm.get('shareWith')?.clearValidators()
+    }
   }
 
   private getTypes() {
@@ -134,6 +196,20 @@ export class ExpenseDialogComponent {
         },
         (error) => {
           this.snackBar.open('Error when trying load statement categories', 'Close', {
+            duration: 3000,
+          });
+        }
+      );
+  }
+
+  private getOthersUsers() {
+    this.http.get<UserDetails[]>(environment.apiUrl.concat(`/users/others`))
+      .subscribe(
+        (response) => {
+          this.othersUsers = response
+        },
+        (error) => {
+          this.snackBar.open('Error when trying load other users details', 'Close', {
             duration: 3000,
           });
         }
